@@ -1,0 +1,114 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Heading Styles */
+h1, h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Button Styles */
+button {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Message Display */
+p#responseMessage {
+    margin-top: 15px;
+    font-size: 14px;
+    color: red;
+}
+
+/* Link Styles */
+a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1, h2 {
+        font-size: 24px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    button {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
