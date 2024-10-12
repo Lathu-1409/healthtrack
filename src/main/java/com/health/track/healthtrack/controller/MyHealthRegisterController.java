@@ -41,5 +41,4 @@ public class MyHealthRegisterController {
         return ResponseEntity.ok(response);
     }
    
-
 }
