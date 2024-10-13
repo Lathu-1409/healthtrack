@@ -1,11 +1,10 @@
-<!-- src/main/resources/templates/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Login</title>
-    <link rel="stylessheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
     <h1>Login to My Health Management Tracker</h1>
@@ -18,7 +17,6 @@
 
         <button type="button" onclick="submitLogin()">Login</button>
     </form>
-
     <p id="responseMessage"></p>
 
     <script>
@@ -38,6 +36,9 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('responseMessage').innerText = data;
+                if (data.toLowerCase().includes('success')) {
+                    window.location.href = 'featurelanding.html';
+                }
             })
             .catch(error => {
                 document.getElementById('responseMessage').innerText = "Error: " + error;

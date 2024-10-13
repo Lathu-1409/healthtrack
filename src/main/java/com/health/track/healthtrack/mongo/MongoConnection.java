@@ -1,5 +1,6 @@
 package com.health.track.healthtrack.mongo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,9 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
+import jakarta.annotation.PostConstruct;
+
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import java.util.concurrent.TimeUnit;
@@ -22,10 +26,14 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 @Component
 public class MongoConnection {
 
-    @Bean
-    public MongoClient mongoClient() {
+@Autowired
+MongoClient client;
 
-        String connectionString = "mongodb+srv://vignesh004vicky:IcTe22fyeBYcxe36@vickydevcluster.hvufz.mongodb.net/?retryWrites=true&w=majority&appName=VickyDevCluster";
+    @Bean
+    @PostConstruct
+    public void mongoClient() {
+
+        String connectionString = "mongodb+srv://vignesh004vicky:password@vickydevcluster.hvufz.mongodb.net/?retryWrites=true&w=majority&appName=VickyDevCluster";
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
@@ -50,12 +58,11 @@ public class MongoConnection {
                     builder.maxConnectionIdleTime(30, TimeUnit.MINUTES))
                 .build();
 
-        return MongoClients.create(settings);
+                client= MongoClients.create(settings);
     }
 
     // Example method to access the collection with the POJO codec
-    public MongoCollection<User> getUserCollection() {
-        MongoClient client = mongoClient();
+    public MongoCollection<User> getUserCollection() {       
         MongoDatabase database = client.getDatabase("MyTestDataBase")
                 .withCodecRegistry(fromRegistries(
                         MongoClientSettings.getDefaultCodecRegistry(),

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Sleep Tracker</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+    <h1 class="text-center">Track Your Weekly Sleep</h1>
+    <form id="sleepTrackForm" class="fade-in">
+        <label for="day1">Monday (hours):</label>
+        <input type="number" id="day1" name="day1" required><br><br>
+
+        <label for="day2">Tuesday (hours):</label>
+        <input type="number" id="day2" name="day2" required><br><br>
+
+        <label for="day3">Wednesday (hours):</label>
+        <input type="number" id="day3" name="day3" required><br><br>
+
+        <label for="day4">Thursday (hours):</label>
+        <input type="number" id="day4" name="day4" required><br><br>
+
+        <label for="day5">Friday (hours):</label>
+        <input type="number" id="day5" name="day5" required><br><br>
+
+        <label for="day6">Saturday (hours):</label>
+        <input type="number" id="day6" name="day6" required><br><br>
+
+        <label for="day7">Sunday (hours):</label>
+        <input type="number" id="day7" name="day7" required><br><br>
+
+        <button type="button" id="submitBtn" onclick="submitSleepTrack()" disabled>Track Sleep</button>
+    </form>
+    <p id="responseMessage"></p>
+
+    <div class="text-center">
+        <button onclick="window.location.href='featurelanding.html'">Back to Features</button>
+    </div>
+    
+    <script>
+        const inputs = document.querySelectorAll('input[type="number"]');
+        const submitBtn = document.getElementById('submitBtn');
+
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                let allFilled = true;
+                inputs.forEach(i => {
+                    if (i.value === '') allFilled = false;
+                });
+                submitBtn.disabled = !allFilled;
+            });
+        });
+
+        function submitSleepTrack() {
+            const formData = {
+                dailySleepHours: [
+                    document.getElementById('day1').value,
+                    document.getElementById('day2').value,
+                    document.getElementById('day3').value,
+                    document.getElementById('day4').value,
+                    document.getElementById('day5').value,
+                    document.getElementById('day6').value,
+                    document.getElementById('day7').value
+                ].map(Number)
+            };
+
+            fetch('/api/health/sleepTrack', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('responseMessage').innerText = data;
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').innerText = "Error: " + error;
+            });
+        }
+    </script>
+</body>
+</html>
