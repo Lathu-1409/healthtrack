@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Login to My Health Management Tracker</h1>
-    <form id="loginForm">
+    <form id="loginForm" class="fade-in">
         <label for="userName">Username:</label>
         <input type="text" id="userName" name="userName" required><br><br>
 
@@ -17,8 +17,14 @@
 
         <button type="button" onclick="submitLogin()">Login</button>
     </form>
-    <p id="responseMessage"></p>
+    <div id="responseContainer" class="response-container fade-in">
+        <p id="responseMessage"></p>
+    </div>
 
+    <div class="text-center">
+        <button id="featureButton" onclick="window.location.href='featurelanding.html'" disabled>Back to Features</button>
+    </div>
+    
     <script>
         function submitLogin() {
             const loginData = {
@@ -35,13 +41,17 @@
             })
             .then(response => response.text())
             .then(data => {
-                document.getElementById('responseMessage').innerText = data;
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.innerText = data;
+                responseMessage.classList.add('highlight');
                 if (data.toLowerCase().includes('success')) {
-                    window.location.href = 'featurelanding.html';
+                    document.getElementById('featureButton').disabled = false;
                 }
             })
             .catch(error => {
-                document.getElementById('responseMessage').innerText = "Error: " + error;
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.innerText = "Error: " + error;
+                responseMessage.classList.add('error');
             });
         }
     </script>

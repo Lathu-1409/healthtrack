@@ -25,7 +25,9 @@
 
         <button type="button" onclick="submitWaterTrack()">Track</button>
     </form>
-    <p id="responseMessage"></p>
+    <div id="responseContainer" class="response-container fade-in">
+        <p id="responseMessage"></p>
+    </div>
 
     <div class="text-center">
         <button onclick="window.location.href='featurelanding.html'">Back to Features</button>
@@ -48,10 +50,14 @@
             })
             .then(response => response.text())
             .then(data => {
-                document.getElementById('responseMessage').innerText = data;
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.innerText = data;
+                responseMessage.classList.add('highlight');
             })
             .catch(error => {
-                document.getElementById('responseMessage').innerText = "Error: " + error;
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.innerText = "Error: " + error;
+                responseMessage.classList.add('error');
             });
         }
     </script>

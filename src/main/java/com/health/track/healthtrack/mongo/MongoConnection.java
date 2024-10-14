@@ -33,8 +33,7 @@ MongoClient client;
     @PostConstruct
     public void mongoClient() {
 
-        String connectionString = "mongodb+srv://vignesh004vicky:password@vickydevcluster.hvufz.mongodb.net/?retryWrites=true&w=majority&appName=VickyDevCluster";
-
+        String connectionString = "";
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
