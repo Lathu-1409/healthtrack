@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Metrics Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/charts.css">
+  <link rel="stylesheet" href="css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@2.0.2/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.0.0"></script>
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon"></span>
+          <h1>HealthPulse</h1>
+        </div>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle">
+            <span class="toggle-icon"></span>
+          </button>
+          <div class="date-range">
+            <button id="date-dropdown" class="date-dropdown">
+              Last 30 Days <span class="arrow-down"></span>
+            </button>
+            <div id="date-dropdown-menu" class="date-dropdown-menu">
+              <div class="date-option" data-days="7">Last 7 Days</div>
+              <div class="date-option" data-days="30">Last 30 Days</div>
+              <div class="date-option" data-days="90">Last 90 Days</div>
+              <div class="date-option" data-days="custom">Custom Range</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="summary-section">
+        <h2 class="section-title">Health Summary</h2>
+        <div class="metrics-summary">
+          <div class="metric-card" data-metric="sleep">
+            <div class="metric-header">
+              <h3>Sleep</h3>
+              <span class="metric-icon sleep-icon"></span>
+            </div>
+            <div class="metric-value">
+              <span id="avg-sleep">0</span>
+              <span class="unit">hrs</span>
+            </div>
+            <div class="metric-trend">
+              <span id="sleep-trend" class="trend neutral">0%</span>
+              <span class="trend-period">vs. prev. 30 days</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-bar">
+                <div id="sleep-goal-progress" class="progress" style="width: 0%"></div>
+              </div>
+              <span class="goal-text"><span id="sleep-goal-percent">0</span>% of 8 hour goal</span>
+            </div>
+          </div>
+
+          <div class="metric-card" data-metric="steps">
+            <div class="metric-header">
+              <h3>Steps</h3>
+              <span class="metric-icon steps-icon"></span>
+            </div>
+            <div class="metric-value">
+              <span id="avg-steps">0</span>
+              <span class="unit">steps</span>
+            </div>
+            <div class="metric-trend">
+              <span id="steps-trend" class="trend neutral">0%</span>
+              <span class="trend-period">vs. prev. 30 days</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-bar">
+                <div id="steps-goal-progress" class="progress" style="width: 0%"></div>
+              </div>
+              <span class="goal-text"><span id="steps-goal-percent">0</span>% of 10k goal</span>
+            </div>
+          </div>
+
+          <div class="metric-card" data-metric="water">
+            <div class="metric-header">
+              <h3>Water</h3>
+              <span class="metric-icon water-icon"></span>
+            </div>
+            <div class="metric-value">
+              <span id="avg-water">0</span>
+              <span class="unit">ml</span>
+            </div>
+            <div class="metric-trend">
+              <span id="water-trend" class="trend neutral">0%</span>
+              <span class="trend-period">vs. prev. 30 days</span>
+            </div>
+            <div class="goal-progress">
+              <div class="goal-bar">
+                <div id="water-goal-progress" class="progress" style="width: 0%"></div>
+              </div>
+              <span class="goal-text"><span id="water-goal-percent">0</span>% of 2000ml goal</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="charts-section">
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="timeline">Timeline</button>
+          <button class="chart-tab" data-chart="comparison">Comparison</button>
+          <button class="chart-tab" data-chart="distribution">Distribution</button>
+        </div>
+        
+        <div class="chart-views">
+          <div class="chart-view active" id="timeline-view">
+            <div class="chart-filters">
+              <div class="chart-metric-selector">
+                <button class="metric-btn active" data-metric="sleep">Sleep</button>
+                <button class="metric-btn" data-metric="steps">Steps</button>
+                <button class="metric-btn" data-metric="water">Water</button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="timeline-chart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-view" id="comparison-view">
+            <div class="chart-container">
+              <canvas id="comparison-chart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-view" id="distribution-view">
+            <div class="chart-filters">
+              <div class="chart-metric-selector">
+                <button class="distribution-btn active" data-metric="sleep">Sleep</button>
+                <button class="distribution-btn" data-metric="steps">Steps</button>
+                <button class="distribution-btn" data-metric="water">Water</button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="distribution-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="forecast-section">
+        <h2 class="section-title">Forecast & Insights</h2>
+        <div class="forecast-cards">
+          <div class="forecast-card">
+            <h3>Weekly Forecast</h3>
+            <div class="forecast-chart-container">
+              <canvas id="forecast-chart"></canvas>
+            </div>
+            <div class="forecast-insight">
+              <p id="forecast-message">Your projected average for next week based on current trends.</p>
+            </div>
+          </div>
+          
+          <div class="forecast-card">
+            <h3>Correlation Analysis</h3>
+            <div class="correlation-chart-container">
+              <canvas id="correlation-chart"></canvas>
+            </div>
+            <div class="correlation-insight">
+              <p id="correlation-message">Analyzing relationships between your health metrics.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="insights-section">
+        <h2 class="section-title">Key Insights</h2>
+        <div class="insights-cards" id="insights-container">
+          <!-- Insights will be added here dynamically -->
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2025 HealthPulse Dashboard | Data refreshed on <span id="last-updated">April, 2025</span></p>
+    </footer>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

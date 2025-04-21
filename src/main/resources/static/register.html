@@ -25,15 +25,22 @@
         <input type="email" id="email" name="email" required><br><br>
 
         <label for="mobileNum">Mobile Number:</label>
-        <input type="text" id="mobileNum" name="mobileNum" required><br><br>
+        <input type="text" id="mobileNum" name="mobileNum" required oninput="validateMobileNum()"><br><br>
 
-        <button type="button" onclick="submitForm()">Register</button>
+        <button type="button" id="registerButton" onclick="submitForm()" disabled>Register</button>
     </form>
     <div id="responseContainer" class="response-container fade-in">
         <p id="responseMessage"></p>
     </div>
 
     <script>
+        function validateMobileNum() {
+            const mobileNum = document.getElementById('mobileNum').value;
+            const registerButton = document.getElementById('registerButton');
+            const isValidMobileNum = /^\d{10}$/.test(mobileNum);
+            registerButton.disabled = !isValidMobileNum;
+        }
+
         function submitForm() {
             const formData = {
                 userName: document.getElementById('userName').value,
@@ -63,6 +70,8 @@
                     loginLink.innerText = "Click here to login";
                     document.getElementById('responseMessage').appendChild(document.createElement('br'));
                     document.getElementById('responseMessage').appendChild(loginLink);
+                    // Clear the form
+                    document.getElementById('registrationForm').reset();
                 }
             })
             .catch(error => {

@@ -20,10 +20,6 @@
     <div id="responseContainer" class="response-container fade-in">
         <p id="responseMessage"></p>
     </div>
-
-    <div class="text-center">
-        <button id="featureButton" onclick="window.location.href='featurelanding.html'" disabled>Back to Features</button>
-    </div>
     
     <script>
         function submitLogin() {
@@ -45,7 +41,9 @@
                 responseMessage.innerText = data;
                 responseMessage.classList.add('highlight');
                 if (data.toLowerCase().includes('success')) {
-                    document.getElementById('featureButton').disabled = false;
+                    document.getElementById('loginForm').reset();
+                    const userName = document.getElementById('userName').value;
+                    window.location.href = `featurelanding.html`;
                 }
             })
             .catch(error => {
