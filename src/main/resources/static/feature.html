@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Health Tracker</title>
   <style>
     body {
@@ -59,157 +59,218 @@
   </style>
 </head>
 <body>
+  <div class="container">
 
-<div class="container">
-  <!-- Login Section -->
-  <div id="loginSection" class="auth-section">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <label for="loginUsername">Username:</label>
-      <input type="text" id="loginUsername" required>
-      <label for="loginPassword">Password:</label>
-      <input type="password" id="loginPassword" required>
-      <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="#" onclick="displaySection('registerSection')">Register here</a></p>
-  </div>
-
-  <!-- Register Section -->
-  <div id="registerSection" class="auth-section hidden">
-    <h2>Register</h2>
-    <form id="registrationForm">
-      <label for="registerName">Username:</label>
-      <input type="text" id="registerName" required>
-      <label for="registerEmail">Email:</label>
-      <input type="email" id="registerEmail" required>
-      <label for="registerPassword">Password:</label>
-      <input type="password" id="registerPassword" required>
-      <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="#" onclick="displaySection('loginSection')">Login here</a></p>
-  </div>
-
-  <!-- Dashboard Section -->
-  <div id="dashboardSection" class="auth-section hidden">
-    <h2>Dashboard</h2>
-    <div class="dashboard-btns">
-      <button onclick="displaySection('waterSection')">Track Water</button>
-      <button onclick="displaySection('sleepSection')">Track Sleep</button>
-      <button onclick="displaySection('stepSection')">Track Steps</button>
-      <button onclick="redirectToSummary()">View Summary</button>
+    <!-- Login Section -->
+    <div id="loginSection" class="auth-section">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label for="loginUsername">Username:</label>
+        <input type="text" id="loginUsername" required />
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" required />
+        <button type="submit">Login</button>
+      </form>
+      <p>Don't have an account? <a href="#" onclick="displaySection('registerSection')">Register here</a></p>
     </div>
-    <button onclick="logout()">Logout</button>
+
+    <!-- Register Section -->
+    <div id="registerSection" class="auth-section hidden">
+      <h2>Register</h2>
+      <form id="registrationForm">
+        <label for="registerName">Username:</label>
+        <input type="text" id="registerName" required />
+        <label for="registerEmail">Email:</label>
+        <input type="email" id="registerEmail" required />
+        <label for="registerPassword">Password:</label>
+        <input type="password" id="registerPassword" required />
+        <button type="submit">Register</button>
+      </form>
+      <p>Already have an account? <a href="#" onclick="displaySection('loginSection')">Login here</a></p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="auth-section hidden">
+      <h2>Dashboard</h2>
+      <div class="dashboard-btns">
+        <button onclick="displaySection('waterSection')">Track Water</button>
+        <button onclick="displaySection('sleepSection')">Track Sleep</button>
+        <button onclick="displaySection('stepSection')">Track Steps</button>
+        <button onclick="redirectToSummary()">View Summary</button>
+      </div>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Water Tracking -->
+    <div id="waterSection" class="auth-section hidden">
+      <h2>Water Tracker</h2>
+      <form id="waterForm">
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" required />
+        <label for="activityLevel">Activity Level (1-3):</label>
+        <input type="number" id="activityLevel" required />
+        <label for="currentIntake">Current Intake (ml):</label>
+        <input type="number" id="currentIntake" required />
+        <button type="submit">Submit</button>
+      </form>
+      <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
+    </div>
+
+    <!-- Sleep Tracking -->
+    <div id="sleepSection" class="auth-section hidden">
+      <h2>Sleep Tracker</h2>
+      <form id="sleepForm">
+        <label for="sleepHours">Enter past 7 days sleep hours (comma separated):</label>
+        <input type="text" id="sleepHours" required />
+        <button type="submit">Submit</button>
+      </form>
+      <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
+    </div>
+
+    <!-- Step Tracking -->
+    <div id="stepSection" class="auth-section hidden">
+      <h2>Step Tracker</h2>
+      <form id="stepForm">
+        <label for="dailyGoal">Daily Goal:</label>
+        <input type="number" id="dailyGoal" required />
+        <label for="currentSteps">Current Steps:</label>
+        <input type="number" id="currentSteps" required />
+        <button type="submit">Submit</button>
+      </form>
+      <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
+    </div>
+
+    <div id="responseOutput" class="response-message hidden"></div>
   </div>
 
-  <!-- Water Tracking -->
-  <div id="waterSection" class="auth-section hidden">
-    <h2>Water Tracker</h2>
-    <form id="waterForm">
-      <label for="weight">Weight (kg):</label>
-      <input type="number" id="weight" required>
-      <label for="activityLevel">Activity Level (1-3):</label>
-      <input type="number" id="activityLevel" required>
-      <label for="currentIntake">Current Intake (ml):</label>
-      <input type="number" id="currentIntake" required>
-      <button type="submit">Submit</button>
-    </form>
-    <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
-  </div>
+  <script>
+    let apiBaseUrl = '/api/health';
+    let loggedInUser = '';
 
-  <!-- Sleep Tracking -->
-  <div id="sleepSection" class="auth-section hidden">
-    <h2>Sleep Tracker</h2>
-    <form id="sleepForm">
-      <label for="sleepHours">Enter past 7 days sleep hours (comma separated):</label>
-      <input type="text" id="sleepHours" required>
-      <button type="submit">Submit</button>
-    </form>
-    <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
-  </div>
-
-  <!-- Step Tracking -->
-  <div id="stepSection" class="auth-section hidden">
-    <h2>Step Tracker</h2>
-    <form id="stepForm">
-      <label for="dailyGoal">Daily Goal:</label>
-      <input type="number" id="dailyGoal" required>
-      <label for="currentSteps">Current Steps:</label>
-      <input type="number" id="currentSteps" required>
-      <button type="submit">Submit</button>
-    </form>
-    <button onclick="displaySection('dashboardSection')">Back to Dashboard</button>
-  </div>
-
-  <div id="responseOutput" class="response-message hidden"></div>
-</div>
-
-<script>
-let apiBaseUrl = 'http://localhost:8080/api/health';
-let loggedInUser = '';
-
-function displaySection(id) {
-  document.querySelectorAll('.auth-section').forEach(el => el.classList.add('hidden'));
-  document.getElementById(id)?.classList.remove('hidden');
-  document.getElementById('responseOutput').classList.add('hidden');
-}
-
-function displayResponse(msg) {
-  const responseEl = document.getElementById('responseOutput');
-  responseEl.innerText = msg;
-  responseEl.classList.remove('hidden');
-}
-
-function redirectToSummary() {
-  if (!loggedInUser) {
-    alert('Please log in first!');
-    return;
-  }
-  const queryString = `index.html?username=${encodeURIComponent(loggedInUser)}`;
-  window.location.href = queryString;
-}
-
-document.getElementById('registrationForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const userName = document.getElementById('registerName').value;
-  const email = document.getElementById('registerEmail').value;
-  const password = document.getElementById('registerPassword').value;
-
-  fetch(`${apiBaseUrl}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userName, email, password })
-  })
-  .then(res => res.text())
-  .then(text => {
-    displayResponse(text);
-    document.getElementById('registrationForm').reset();
-  });
-});
-
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const userName = document.getElementById('loginUsername').value;
-  const password = document.getElementById('loginPassword').value;
-
-  fetch(`${apiBaseUrl}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userName, password })
-  })
-  .then(res => res.text())
-  .then(text => {
-    if (text.toLowerCase().includes('success')) {
-      loggedInUser = userName;
-      displaySection('dashboardSection');
+    function displaySection(id) {
+      document.querySelectorAll('.auth-section').forEach(el => el.classList.add('hidden'));
+      document.getElementById(id)?.classList.remove('hidden');
+      document.getElementById('responseOutput').classList.add('hidden');
     }
-    displayResponse(text);
-  });
-});
 
-function logout() {
-  loggedInUser = '';
-  displaySection('loginSection');
-}
-</script>
+    function displayResponse(msg) {
+      const responseEl = document.getElementById('responseOutput');
+      responseEl.innerText = msg;
+      responseEl.classList.remove('hidden');
+    }
+
+    function redirectToSummary() {
+      if (!loggedInUser) {
+        alert('Please log in first!');
+        return;
+      }
+      const queryString = `index.html?username=${encodeURIComponent(loggedInUser)}`;
+      window.location.href = queryString;
+    }
+
+    function logout() {
+      loggedInUser = '';
+      displaySection('loginSection');
+    }
+
+    // Registration
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const userName = document.getElementById('registerName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      fetch(`${apiBaseUrl}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, email, password })
+      })
+      .then(res => res.text())
+      .then(text => {
+        displayResponse(text);
+        document.getElementById('registrationForm').reset();
+      });
+    });
+
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const userName = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+      fetch(`${apiBaseUrl}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, password })
+      })
+      .then(res => res.text())
+      .then(text => {
+        if (text.toLowerCase().includes('success')) {
+          loggedInUser = userName;
+          displaySection('dashboardSection');
+        }
+        displayResponse(text);
+      });
+    });
+
+    // Water Tracking
+    document.getElementById('waterForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const weight = Number(document.getElementById('weight').value);
+      const activityLevel = Number(document.getElementById('activityLevel').value);
+      const currentIntake = Number(document.getElementById('currentIntake').value);
+
+      if (!loggedInUser) return alert("Please login first.");
+
+      fetch(`${apiBaseUrl}/waterTrack?username=${encodeURIComponent(loggedInUser)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ weight, activityLevel, currentIntake })
+      })
+      .then(res => res.text())
+      .then(text => {
+        displayResponse(text);
+        document.getElementById('waterForm').reset();
+      });
+    });
+
+    // Sleep Tracking
+    document.getElementById('sleepForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const rawInput = document.getElementById('sleepHours').value;
+      const dailySleepHours = rawInput.split(',').map(val => parseFloat(val.trim()));
+
+      if (!loggedInUser) return alert("Please login first.");
+
+      fetch(`${apiBaseUrl}/sleepTrack?username=${encodeURIComponent(loggedInUser)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dailySleepHours })
+      })
+      .then(res => res.text())
+      .then(text => {
+        displayResponse(text);
+        document.getElementById('sleepForm').reset();
+      });
+    });
+
+    // Step Tracking
+    document.getElementById('stepForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const dailyGoal = Number(document.getElementById('dailyGoal').value);
+      const currentSteps = Number(document.getElementById('currentSteps').value);
+
+      if (!loggedInUser) return alert("Please login first.");
+
+      fetch(`${apiBaseUrl}/stepTrack?username=${encodeURIComponent(loggedInUser)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dailyGoal, currentSteps })
+      })
+      .then(res => res.text())
+      .then(text => {
+        displayResponse(text);
+        document.getElementById('stepForm').reset();
+      });
+    });
+  </script>
 </body>
 </html>
